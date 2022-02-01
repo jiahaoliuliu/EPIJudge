@@ -2,6 +2,10 @@ package epi.chapter5.arrays;
 
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -43,7 +47,7 @@ public class Bootcamp {
     }
 
     @Test
-    public void test() {
+    public void testOrderEvents() {
         // Given
         int[] data = new int[] {1,2,3,4,5,6};
 
@@ -58,4 +62,46 @@ public class Bootcamp {
         }
     }
 
+    /**
+     * Book solution 1
+     */
+    private static void evenOdd(List<Integer> myList) {
+        int nextEven = 0;
+        int nextOdd = myList.size() - 1;
+        while (nextEven < nextOdd) {
+            if (myList.get(nextEven) % 2 == 0) {
+                nextEven ++;
+            } else {
+                Collections.swap(myList, nextEven, nextOdd--);
+            }
+        }
+    }
+
+    @Test
+    public void testEvenOdd() {
+        // Given
+        List<Integer> data = new ArrayList<>(6);
+        data.add(1);
+        data.add(2);
+        data.add(3);
+        data.add(4);
+        data.add(5);
+        data.add(6);
+
+        // When
+        evenOdd(data);
+
+        // Then
+        List<Integer> expected = new ArrayList<>(6);
+        expected.add(6);
+        expected.add(2);
+        expected.add(4);
+        expected.add(5);
+        expected.add(3);
+        expected.add(1);
+        assertEquals(expected.size(), data.size());
+        for (int i = 0; i < data.size(); i++) {
+            assertEquals(expected.get(i), data.get(i));
+        }
+    }
 }
