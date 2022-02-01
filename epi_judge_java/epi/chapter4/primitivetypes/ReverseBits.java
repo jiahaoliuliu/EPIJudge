@@ -1,6 +1,14 @@
 package epi.chapter4.primitivetypes;
 import epi.test_framework.EpiTest;
 import epi.test_framework.GenericTest;
+
+/**
+ * Write a program that takes a 64-bit unsigned integer and returns the 640bit unsigned integer consistent
+ * of the bits of the input in the reverse order
+ * Example:
+ * - Input:  1110 0000 0000 0000 0001
+ * - Output: 1000 0000 0000 0000 0111
+ */
 public class ReverseBits {
 
   @EpiTest(testDataFile = "reverse_bits.tsv")
