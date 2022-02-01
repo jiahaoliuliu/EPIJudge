@@ -160,7 +160,7 @@ problem_mapping = {
                 "total": 10000
             },
             "Java: RectangleIntersection.java": {
-                "passed": 0,
+                "passed": 2,
                 "total": 10000
             },
             "Python: rectangle_intersection.py": {
