@@ -43,8 +43,8 @@ public class SortedArrayRemoveDups {
   //      - Compare with the previous candidate? --> Better. We always need to know the last known value
   // (2, 3, 5, 5, 7, 11, 11, 13)
   // (2, 3, 5, 7, 5, 11, 11, 13)
-  // (2, 3, 5, 7, 11, 11, 5, 13)
-  // (2, 3, 5, 7, 11, 13, 5, 11)
+  // (2, 3, 5, 7, 11, 5, 11, 13)
+  // (2, 3, 5, 7, 11, 13, 11, 5)
 
   public static int deleteDuplicates(List<Integer> array) {
     // Corner case
@@ -94,7 +94,7 @@ public class SortedArrayRemoveDups {
   }
 
   @Test
-  public void test1() {
+  public void testDeleteDuplicates1() {
     // Given
     List<Integer> array = new ArrayList<>();
 
@@ -106,7 +106,7 @@ public class SortedArrayRemoveDups {
   }
 
   @Test
-  public void test2() {
+  public void testDeleteDuplicates2() {
     // Given
     List<Integer> array = new ArrayList<>();
     array.add(1);
@@ -123,7 +123,7 @@ public class SortedArrayRemoveDups {
   }
 
   @Test
-  public void test3() {
+  public void testDeleteDuplicates3() {
     // Given
     List<Integer> array = new ArrayList<>();
     array.add(2);
@@ -152,6 +152,55 @@ public class SortedArrayRemoveDups {
     assertTrue(expectedResult.equals(array));
   }
 
+  /**
+   * Book solution. Set a index from where to write, which only updates if needed,
+   * and move the index to find the next suitable candidate.
+   * Since the array is sorted, one single loop is enough
+   */
+  public static int bookSol1DeleteDuplicates(List<Integer> A) {
+    if (A.isEmpty()) {
+      return 0;
+    }
 
+    // Write index is the position to write. Since we don't care about the written item, we use set instead
+    // of swap
+    int writeIndex = 1;
+    for (int i = 1; i < A.size(); ++i) {
+      // find all the elements that is not equal, starting from the position 1
+      if (!A.get(writeIndex - 1).equals(A.get(i))) {
+        A.set(writeIndex++, A.get(i));
+      }
+    }
+    return writeIndex;
+  }
 
+  @Test
+  public void testBookSol1DeleteDuplicates1() {
+    // Given
+    List<Integer> array = new ArrayList<>();
+    array.add(2);
+    array.add(3);
+    array.add(5);
+    array.add(5);
+    array.add(7);
+    array.add(11);
+    array.add(11);
+    array.add(13);
+
+    // When
+    int numberOfValidElements = bookSol1DeleteDuplicates(array);
+
+    // Then
+    List<Integer> expectedResult = new ArrayList<>();
+    expectedResult.add(2);
+    expectedResult.add(3);
+    expectedResult.add(5);
+    expectedResult.add(7);
+    expectedResult.add(11);
+    expectedResult.add(13);
+    expectedResult.add(11);
+    expectedResult.add(5);
+    assertEquals(6, numberOfValidElements);
+    assertTrue(expectedResult.equals(array));
+  }
 }
