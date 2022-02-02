@@ -4,6 +4,7 @@ import epi.test_framework.GenericTest;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.Assert.assertFalse;
@@ -37,6 +38,9 @@ public class PrimeSieve {
    *               - Set a list of booleans to mark the values
    *               - The list of booleans will have the same size as the list of n
    *               - The default value will be false (it is not checked)
+   *
+   *  Complexity: O(n * sqrt(n)/(log n)^2) = O(n^(3/2)/(log n)^2)
+   *  Space complexity: O(n)
    * @param n
    * @return
    */
@@ -150,6 +154,65 @@ public class PrimeSieve {
     expectedList.add(11);
 
     assertTrue(expectedList.equals(result));
+  }
+
+  /**
+   * Book solution 1 - Using array of booleans
+   * Complexity: O(n/2 + n/3 + n/5 + n/7 + n/11 + ) = O(n log log n)
+   * Space complexity O(n)
+   * @param args
+   */
+  private static List<Integer> bookSol1GeneratePrimes(int n) {
+    List<Integer> primes = new ArrayList<>();
+    // isPrime.get(p) represents if p is prime or not. Initially, set each
+    // to true, excepting 0 and 1. Then use sieving to eliminate nonprimes.
+    List<Boolean> isPrime = new ArrayList<>(Collections.nCopies(n+1, true));
+    isPrime.set(0, false);
+    isPrime.set(1, false);
+    for (int p = 2; p <=n; ++p) {
+      if(isPrime.get(p)) {
+        primes.add(p);
+        // sieve p's multiplies
+        for (int i = p * 2; i <= n; i+=p) {
+          isPrime.set(i, false);
+        }
+      }
+    }
+    return primes;
+  }
+
+  /**
+   * Book solution 2 - Sierving from p^2 instead of p
+   * @param args
+   */
+  private static List<Integer> bookSol2GeneratePrimes(int n) {
+    if (n < 2) {
+      return Collections.emptyList();
+    }
+
+    final int size = (int)Math.floor(0.5 * (n - 3)) + 1;
+    List<Integer> primes = new ArrayList<>();
+    primes.add(2);
+    // isPrime.get(i) represents whether (2i + 3) is prime or not.
+    // For example, isPrime.get(0) represents 3 is prime or not,
+    // isPrime.get(1) represents 5, isPrime.get(2) represents 7, etc
+    // Initially, set each to true. Then use sierving to eliminate nonprimes.
+    List<Boolean> isPrime = new ArrayList<>(Collections.nCopies(size, true));
+    for (long i = 0; i < size; ++i) {
+      if (isPrime.get((int)i)) {
+        int p = (((int)i * 2) + 3);
+        primes.add(p);
+        // Sieving from p^2, whose value is (4i^2 + 12i + 9). The index of this
+        // value in isPrime is (2i^2 + 6i + 3) because isPrime.get(i) represents
+        // 2i + 3
+        //
+        // Note that we need to use long type for j because p^2 might overflow.
+        for (long j = ((i * i) * 2) + 6 * i + 3; j < size; j += p) {
+          isPrime.set((int)j, false);
+        }
+      }
+    }
+    return primes;
   }
 
   public static void main(String[] args) {
