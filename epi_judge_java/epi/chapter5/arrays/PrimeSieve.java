@@ -44,10 +44,20 @@ public class PrimeSieve {
   // Given n, return all primes up to and including n.
   public static List<Integer> generatePrimes(int n) {
     List<Integer> result = new ArrayList<>();
-    for (int i = 2; i <= n; i++) {
-      if (isPrime(i)) {
-        result.add(i);
+    boolean[] checkedList = new boolean[n];
+    int currentPrime = 2;
+    while (currentPrime <= n) {
+      if (!checkedList[currentPrime-1]) {
+        checkedList[currentPrime-1] = true;
+        if (isPrime(currentPrime)) {
+          result.add(currentPrime);
+          // Mark the rest of the primes
+          for (int i = currentPrime+currentPrime; i <= checkedList.length; i+=currentPrime) {
+            checkedList[i-1] = true;
+          }
+        }
       }
+      currentPrime++;
     }
 
     return result;
@@ -90,6 +100,56 @@ public class PrimeSieve {
 
     // Then
     assertTrue(result);
+  }
+
+  @Test
+  public void testGeneratePrimes() {
+    // Given
+    int n = 2;
+
+    // When
+    List<Integer> result = generatePrimes(n);
+
+    // Then
+    List<Integer> expectedList = new ArrayList<>();
+    expectedList.add(2);
+
+    assertTrue(expectedList.equals(result));
+  }
+
+  @Test
+  public void testGeneratePrimes3() {
+    // Given
+    int n = 3;
+
+    // When
+    List<Integer> result = generatePrimes(n);
+
+    // Then
+    List<Integer> expectedList = new ArrayList<>();
+    expectedList.add(2);
+    expectedList.add(3);
+
+    assertTrue(expectedList.equals(result));
+  }
+
+  @Test
+  public void testGeneratePrimes4() {
+    // Given
+    int n = 11;
+
+    // When
+    List<Integer> result = generatePrimes(n);
+
+    // Then
+    List<Integer> expectedList = new ArrayList<>();
+    expectedList.add(2);
+    expectedList.add(3);
+    expectedList.add(5);
+    expectedList.add(7);
+    expectedList.add(11);
+
+    assertTrue(expectedList.equals(result));
   }
 
   public static void main(String[] args) {
