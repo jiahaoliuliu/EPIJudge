@@ -302,7 +302,7 @@ problem_mapping = {
                 "total": 24
             },
             "Java: PrimeSieve.java": {
-                "passed": 0,
+                "passed": 24,
                 "total": 24
             },
             "Python: prime_sieve.py": {
