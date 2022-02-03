@@ -8,6 +8,8 @@ import static org.junit.Assert.assertTrue;
 /**
  * A palindromic string is one which reads the same when it is reversed. Create a program to check
  * if a string is palindrome.
+ * Time complexity = O(n)
+ * Space complexity = O(1)
  *
  * Example: tacocat = tacocat
  */
@@ -90,6 +92,8 @@ public class Bootcamp {
 
     /**
      * Book solution 1
+     * Time complexity = O(n)
+     * Space complexity = O(1)
      */
     public static boolean bookSol1IsPalindromic(String s) {
         for (int i = 0, j = s.length() - 1; i < j; ++i, --j) {
