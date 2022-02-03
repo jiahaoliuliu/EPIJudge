@@ -20,7 +20,7 @@ import static org.junit.Assert.assertTrue;
  *
  * Hint: Exclude the multiple of primes
  */
-public class PrimeSieve {
+public class Q9PrimeSieve {
 
   /**
    * Analysis. We can generate all the number from 2 to n and do elimination

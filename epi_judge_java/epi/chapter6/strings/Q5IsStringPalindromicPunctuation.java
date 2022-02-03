@@ -18,7 +18,7 @@ import static org.junit.Assert.assertTrue;
  * Hint: Use two indices
  *
  */
-public class IsStringPalindromicPunctuation {
+public class Q5IsStringPalindromicPunctuation {
 
   /**
    * Basic analysis
@@ -229,6 +229,8 @@ public class IsStringPalindromicPunctuation {
 
   /**
    * Book solution 1 - Using a while
+   * Time complexity O(n) where n is the length of S
+   * Space complexity O(1)
    * @param args
    */
   private static boolean bookSol1IsPalindrome(String s) {

@@ -570,7 +570,7 @@ problem_mapping = {
                 "total": 40
             },
             "Java: LookAndSay.java": {
-                "passed": 0,
+                "passed": 40,
                 "total": 40
             },
             "Python: look_and_say.py": {

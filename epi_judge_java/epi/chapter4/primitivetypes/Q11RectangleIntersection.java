@@ -13,7 +13,7 @@ import static org.junit.Assert.assertEquals;
  *
  * Hint: Think of the X and Y dimensions independently.
  */
-public class RectangleIntersection {
+public class Q11RectangleIntersection {
   @EpiUserType(ctorParams = {int.class, int.class, int.class, int.class})
   public static class Rect {
     int x, y, width, height;

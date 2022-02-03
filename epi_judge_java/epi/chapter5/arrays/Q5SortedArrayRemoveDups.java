@@ -5,7 +5,6 @@ import epi.test_framework.TimedExecutor;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -26,7 +25,7 @@ import static org.junit.Assert.assertTrue;
  *
  * Hint: There are an O(n) time and O(1) space solution.
  */
-public class SortedArrayRemoveDups {
+public class Q5SortedArrayRemoveDups {
 
   // Returns the number of valid entries after deletion.
   // Cases

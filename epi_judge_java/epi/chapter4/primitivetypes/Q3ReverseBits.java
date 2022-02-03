@@ -9,7 +9,7 @@ import epi.test_framework.GenericTest;
  * - Input:  1110 0000 0000 0000 0001
  * - Output: 1000 0000 0000 0000 0111
  */
-public class ReverseBits {
+public class Q3ReverseBits {
 
   @EpiTest(testDataFile = "reverse_bits.tsv")
   public static long reverseBits(long number) {
