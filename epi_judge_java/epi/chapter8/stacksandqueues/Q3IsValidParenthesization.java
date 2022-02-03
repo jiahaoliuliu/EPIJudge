@@ -5,6 +5,7 @@ import org.junit.Test;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.Map;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -27,6 +28,9 @@ public class Q3IsValidParenthesization {
    * Initial analysis: Add the left part of the parenthesis to the queue.
    * When a right part of parenthesis is found, check if the first element of the stack
    * is the one which matches to the right parenthesis
+   *
+   * Time complexity: O(n) where n is the length of the parameter
+   * Space complexity: O(n) where n is the length of the parameter
    *
    * @param s The string with parenthesis
    * @return False if the right part of parenthesis does not matches with the element in the queue
@@ -145,6 +149,110 @@ public class Q3IsValidParenthesization {
 
     // When
     boolean result = isWellFormed(word);
+
+    // Then
+    assertFalse(result);
+  }
+
+  /**
+   * Book solution 1
+   * Time complexity O(n)
+   * @param args
+   */
+  public static boolean bookSol1IsWellFormed(String s) {
+    if (s == null) return true;
+    Deque<Character> leftChars = new ArrayDeque<>();
+    final Map<Character, Character> LOOKUP =
+            Map.of('(', ')', '{', '}', '[', ']');
+    for (int i = 0; i < s.length(); ++i) {
+      if (LOOKUP.get(s.charAt(i)) != null) {
+        leftChars.addFirst(s.charAt(i));
+      } else if (leftChars.isEmpty() || LOOKUP.get(leftChars.removeFirst()) != s.charAt(i)) {
+        return false; // Unmatched right char
+      }
+    }
+    return leftChars.isEmpty();
+  }
+
+  @Test
+  public void testBookSol1IsWellFormed1() {
+    // Given
+    String word = null;
+
+    // When
+    boolean result = bookSol1IsWellFormed(word);
+
+    // Then
+    assertTrue(result);
+  }
+
+  @Test
+  public void testBookSol1IsWellFormed2() {
+    // Given
+    String word = "";
+
+    // When
+    boolean result = bookSol1IsWellFormed(word);
+
+    // Then
+    assertTrue(result);
+  }
+
+  @Test
+  public void testBookSol1IsWellFormed3() {
+    // Given
+    String word = "([]){()}";
+
+    // When
+    boolean result = bookSol1IsWellFormed(word);
+
+    // Then
+    assertTrue(result);
+  }
+
+  @Test
+  public void testBookSol1IsWellFormed4() {
+    // Given
+    String word = "[()[]{()()}]";
+
+    // When
+    boolean result = bookSol1IsWellFormed(word);
+
+    // Then
+    assertTrue(result);
+  }
+
+  @Test
+  public void testBookSol1IsWellFormed5() {
+    // Given
+    String word = "{)";
+
+    // When
+    boolean result = bookSol1IsWellFormed(word);
+
+    // Then
+    assertFalse(result);
+  }
+
+  @Test
+  public void testBookSol1IsWellFormed6() {
+    // Given
+    String word = "{(})";
+
+    // When
+    boolean result = bookSol1IsWellFormed(word);
+
+    // Then
+    assertFalse(result);
+  }
+
+  @Test
+  public void testBookSol1IsWellFormed7() {
+    // Given
+    String word = "[()[]{()()}";
+
+    // When
+    boolean result = bookSol1IsWellFormed(word);
 
     // Then
     assertFalse(result);
