@@ -906,7 +906,7 @@ problem_mapping = {
                 "total": 78
             },
             "Java: IsValidParenthesization.java": {
-                "passed": 0,
+                "passed": 78,
                 "total": 78
             },
             "Python: is_valid_parenthesization.py": {
