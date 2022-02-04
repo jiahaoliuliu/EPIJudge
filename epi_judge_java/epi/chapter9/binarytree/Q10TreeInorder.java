@@ -1,9 +1,21 @@
-package epi;
+package epi.chapter9.binarytree;
+import epi.BinaryTreeNode;
 import epi.test_framework.EpiTest;
 import epi.test_framework.GenericTest;
 
 import java.util.List;
-public class TreeInorder {
+
+/**
+ * The direct implementation of an inorder traversal using recursion has O(h) space complexity,
+ * where h is the height of the tree. Recursion can be removed with an explicit stack, but the space
+ * complexity remains O(h)
+ *
+ * Write a nonrecursive program for computing the inorder traversal sequence for a binary tree.
+ * Assume nodes have parent fields.
+ *
+ * Hint: How can you tell whether a node is a left child or right child of its parent?
+ */
+public class Q10TreeInorder {
 
   private static class NodeAndState {
     public BinaryTreeNode<Integer> node;
@@ -16,9 +28,17 @@ public class TreeInorder {
     }
   }
 
+  /**
+   * Initial analysis: In order means: Left, root, right.
+   *
+   * We can use a data structure to store the data temporally.
+   *
+   * @param tree
+   * @return
+   */
   @EpiTest(testDataFile = "tree_inorder.tsv")
   public static List<Integer> inorderTraversal(BinaryTreeNode<Integer> tree) {
-    // TODO - you fill in here.
+    // TODO: Implement this
     return null;
   }
 
