@@ -1360,7 +1360,7 @@ problem_mapping = {
                 "total": 11003
             },
             "Java: RealSquareRoot.java": {
-                "passed": 0,
+                "passed": 2,
                 "total": 11003
             },
             "Python: real_square_root.py": {
