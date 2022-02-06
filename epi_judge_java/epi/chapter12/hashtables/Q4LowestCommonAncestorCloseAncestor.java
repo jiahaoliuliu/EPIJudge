@@ -17,7 +17,7 @@ import epi.test_framework.TimedExecutor;
  *
  * Hint: Focus on the extreme case described in the problem introduction.
  *
- * Extra: Problem 9.4
+ * Extra: Problem 9.3
  * Any two nodes in a binary tree have a common ancestor, namely the root. The lowest common ancestor (LCA)
  * of any two nodes in a binary tree is the node furthest from the root that is an ancestor of both nodes.
  * For example, the LCA of M and N in Figure 9.1 on Page 123 is K.
@@ -30,6 +30,11 @@ import epi.test_framework.TimedExecutor;
  *
  * Hint: When is the root the LCA?
  *
+ * Extra: Problem 9.4
+ * Given two nodes in a binary tree, design an algorithm that computes their LCA. Assume that each node has a
+ * parent pointer.
+ *
+ * Hint: The problem is easy if both nodes are the same distance from the root
  */
 public class Q4LowestCommonAncestorCloseAncestor {
 
