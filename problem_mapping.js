@@ -1430,7 +1430,7 @@ problem_mapping = {
                 "total": 50
             },
             "Java: SearchForMissingElement.java": {
-                "passed": 0,
+                "passed": 50,
                 "total": 50
             },
             "Python: search_for_missing_element.py": {
