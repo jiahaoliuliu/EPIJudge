@@ -7,10 +7,7 @@ import epi.test_framework.TestFailure;
 import epi.test_framework.TimedExecutor;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 
@@ -50,7 +47,9 @@ public class Q4LowestCommonAncestorCloseAncestor {
    * Initial analysis. We just have to scale up, add the nodes into two hash tables (does it need to be hash tables)
    * and check it periodically, it should be ok.
    *
-   * Complexity: O(n), where n is the deepest element between node0 and node1, + 1
+   * Complexity: O(D1 + D2), where D1 is the distance from the LCA to the first node, and D2 is the distance from the
+   * LCA to the second node. In the worse case scenario, We are going from the leaf to the root, which means O(h),
+   * where h is the height of the tree.
    *
    * @param node0
    * @param node1
@@ -111,6 +110,46 @@ public class Q4LowestCommonAncestorCloseAncestor {
     assertEquals(root, result);
   }
 
+  public static BinaryTree<Integer> bookSol1Lca(BinaryTree<Integer> node0, BinaryTree<Integer> node1) {
+    Set<BinaryTree<Integer>> hash = new HashSet<>();
+    while (node0 != null || node1 != null) {
+      // Ascent tree in tandem from these two nodes
+      if (node0 != null) {
+        if (!hash.add(node0)) {
+          return node0;
+        }
+        node0 = node0.parent;
+      }
+
+      if (node1 != null) {
+        if (!hash.add(node1)) {
+          return node1;
+        }
+        node1 = node1.parent;
+      }
+    }
+    throw new IllegalArgumentException("Node0 and Node1 are not in the same tree");
+  }
+
+  @Test
+  public void testBook1SolLca() {
+    // Given
+    BinaryTree<Integer> root = new BinaryTree<>(1);
+    BinaryTree<Integer> node0 = new BinaryTree<>(2);
+    root.left = node0;
+    node0.parent = root;
+
+    BinaryTree<Integer> node1 = new BinaryTree<>(3);
+    root.right = node1;
+    node1.parent = root;
+
+    // When
+    BinaryTree<Integer> result = bookSol1Lca(node0, node1);
+
+    // Then
+    assertEquals(root, result);
+  }
+
   @EpiTest(testDataFile = "lowest_common_ancestor.tsv")
   public static int lcaWrapper(TimedExecutor executor, BinaryTree<Integer> tree,
                                Integer key0, Integer key1) throws Exception {
@@ -128,7 +167,7 @@ public class Q4LowestCommonAncestorCloseAncestor {
   public static void main(String[] args) {
     System.exit(
         GenericTest
-            .runFromAnnotations(args, "Q4LowestCommonAncestorCloseAncestor.java",
+            .runFromAnnotations(args, "LowestCommonAncestorCloseAncestor.java",
                                 new Object() {}.getClass().getEnclosingClass())
             .ordinal());
   }
