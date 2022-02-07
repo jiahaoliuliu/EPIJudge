@@ -237,8 +237,12 @@ public class Q6SmallestSubarrayCoveringSet {
    */
   public static Subarray bookSol1FindSmallestSubarrayCoveringSet(List<String> paragraph,
                                                                  Set<String> keywords) {
-    Map<String, Long> keywordsToCover = keywords.stream().collect(
-            Collectors.groupingBy(Function.identity(), Collectors.counting()));
+    // Create a hash table with all the keywords and its occurrences
+    Map<String, Long> keywordsToCover = new HashMap<>();
+    for (String keyword: keywords) {
+      keywordsToCover.putIfAbsent(keyword, 0L);
+      keywordsToCover.put(keyword, keywordsToCover.get(keyword) + 1);
+    }
 
     Subarray result = new Subarray(-1, -1);
     int remainingToCover = keywords.size();
@@ -246,31 +250,30 @@ public class Q6SmallestSubarrayCoveringSet {
       // If the right position of the paragraph is one of the keywords,
       // then decrease the occurrence of that keyword in the keywordsToCover
       // If as result of that decrease the there were 1 or more than 1 keywords, decrease the remaining to cover
-      if (keywordsToCover.containsKey(paragraph.get(right)) &&
-              keywordsToCover.put(paragraph.get(right), keywordsToCover.get(paragraph.get(right)) - 1) >= 1) {
-        --remainingToCover;
+      if (keywordsToCover.containsKey(paragraph.get(right))) {
+        Long newOccurrence = keywordsToCover.get(paragraph.get(right)) - 1;
+        Long previousOccurrences = keywordsToCover.put(paragraph.get(right), newOccurrence);
+        if (previousOccurrences >= 1) {
+          --remainingToCover;
+        }
       }
 
-      // Keeps advancing left until it reaches end or keywordsToCover does not have all the keywords.
+      // Once we found all the keywords, try to advance left and find a smaller subarray
       while (remainingToCover == 0) {
-        // If we just started or if we have started but the difference between current pointers is smaller than the
-        // difference on the result
+        // If we just started or if we have started but we have found a smaller set
         if ((result.start == -1 && result.end == -1) || right - left < result.end - result.start) {
           // Update the result
           result.start = left;
           result.end = right;
         }
 
-        // If the left pointer is pointing a keyword
-        // Then increase the number of occurrences of the keyword
-        // If the occurrence was equal or bigger than 0, then increase the cover
-        if (keywordsToCover.containsKey(paragraph.get(left)) &&
-            keywordsToCover.put(paragraph.get(left),
-                    keywordsToCover.get(paragraph.get(left)) + 1) >= 0) {
-          ++ remainingToCover;
+        // If the left pointer is pointing a keyword, then by advancing the left pointer we are losing a keyword
+        if (keywordsToCover.containsKey(paragraph.get(left))) {
+          Long newOccurrence = keywordsToCover.get(paragraph.get(left)) + 1;
+          if (keywordsToCover.put(paragraph.get(left), newOccurrence) >= 0) {
+            ++remainingToCover;
+          }
         }
-        // Advance the left pointer (the left pointer will be more advanced than the right one?)
-        // Advance the left pointer until there is no item remain to cover
         ++left;
       }
     }
@@ -297,8 +300,9 @@ public class Q6SmallestSubarrayCoveringSet {
       throws Exception {
     Set<String> copy = new HashSet<>(keywords);
 
+    // TODO: Revert the call to my own method
     Subarray result = executor.run(
-        () -> findSmallestSubarrayCoveringSet(paragraph, keywords));
+        () -> bookSol1FindSmallestSubarrayCoveringSet(paragraph, keywords));
 
     if (result.start < 0 || result.start >= paragraph.size() ||
         result.end < 0 || result.end >= paragraph.size() ||
