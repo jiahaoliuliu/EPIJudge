@@ -130,7 +130,7 @@ public class Q5RealSquareRoot {
   public static void main(String[] args) {
     System.exit(
         GenericTest
-            .runFromAnnotations(args, "RealSquareRoot.java",
+            .runFromAnnotations(args, "Q5RealSquareRoot.java",
                                 new Object() {}.getClass().getEnclosingClass())
             .ordinal());
   }

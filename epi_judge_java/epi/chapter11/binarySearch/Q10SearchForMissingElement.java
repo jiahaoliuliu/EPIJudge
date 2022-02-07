@@ -201,7 +201,7 @@ public class Q10SearchForMissingElement {
   public static void main(String[] args) {
     System.exit(
         GenericTest
-            .runFromAnnotations(args, "SearchForMissingElement.java",
+            .runFromAnnotations(args, "Q10SearchForMissingElement.java",
                                 new Object() {}.getClass().getEnclosingClass())
             .ordinal());
   }

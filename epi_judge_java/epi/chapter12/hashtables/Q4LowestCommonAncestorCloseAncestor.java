@@ -5,6 +5,12 @@ import epi.test_framework.EpiTest;
 import epi.test_framework.GenericTest;
 import epi.test_framework.TestFailure;
 import epi.test_framework.TimedExecutor;
+import org.junit.Test;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * The problem 9.4 on Page 130 is concerned with computing the LCA in a binary tree with parent pointers
@@ -38,11 +44,72 @@ import epi.test_framework.TimedExecutor;
  */
 public class Q4LowestCommonAncestorCloseAncestor {
 
+  /**
+   * Initial analysis. We just have to scale up, add the nodes into two hash tables (does it need to be hash tables)
+   * and check it periodically, it should be ok.
+   *
+   * Complexity: O(n), where n is the deepest element between node0 and node1, + 1
+   * 
+   * @param node0
+   * @param node1
+   * @return
+   */
   public static BinaryTree<Integer> lca(BinaryTree<Integer> node0,
                                         BinaryTree<Integer> node1) {
-    // TODO - you fill in here.
-    return null;
+    // Corner case
+    if (node0 == node1) return node0;
+    if (node0.left == node1 || node0.right == node1) return node0;
+    if (node1.left == node0 || node1.right == node0) return node1;
+
+    Map<BinaryTree<Integer>, BinaryTree<Integer>> node0Parents = new HashMap<>();
+    Map<BinaryTree<Integer>, BinaryTree<Integer>> node1Parents = new HashMap<>();
+    node0Parents.put(node0, node0.left);
+    node1Parents.put(node1, node1.left);
+
+    // While none of the nodes has reached to the root
+    while (node0.parent != null || node1.parent != null) {
+      if (node0.parent != null) {
+        if (node1Parents.containsKey(node0.parent)) {
+          return node0.parent;
+        }
+
+        node0Parents.put(node0.parent, node0);
+        node0 = node0.parent;
+      }
+
+      if (node1.parent != null) {
+        if (node0Parents.containsKey(node1.parent)) {
+          return node1.parent;
+        }
+
+        node1Parents.put(node1.parent, node1);
+        node1 = node1.parent;
+      }
+    }
+
+    // Both of them have reached to the root
+    return node0;
   }
+
+  @Test
+  public void testLca() {
+    // Given
+    BinaryTree<Integer> root = new BinaryTree<>(1);
+    BinaryTree<Integer> node0 = new BinaryTree<>(2);
+    root.left = node0;
+    node0.parent = root;
+
+    BinaryTree<Integer> node1 = new BinaryTree<>(3);
+    root.right = node1;
+    node1.parent = root;
+
+    // When
+    BinaryTree<Integer> result = lca(node0, node1);
+
+    // Then
+    assertEquals(root, result);
+  }
+
   @EpiTest(testDataFile = "lowest_common_ancestor.tsv")
   public static int lcaWrapper(TimedExecutor executor, BinaryTree<Integer> tree,
                                Integer key0, Integer key1) throws Exception {
@@ -60,7 +127,7 @@ public class Q4LowestCommonAncestorCloseAncestor {
   public static void main(String[] args) {
     System.exit(
         GenericTest
-            .runFromAnnotations(args, "LowestCommonAncestorCloseAncestor.java",
+            .runFromAnnotations(args, "Q4LowestCommonAncestorCloseAncestor.java",
                                 new Object() {}.getClass().getEnclosingClass())
             .ordinal());
   }
