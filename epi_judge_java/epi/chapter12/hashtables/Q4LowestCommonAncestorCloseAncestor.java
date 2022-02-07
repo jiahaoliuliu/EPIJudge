@@ -62,7 +62,7 @@ public class Q4LowestCommonAncestorCloseAncestor {
     if (node0.left == node1 || node0.right == node1) return node0;
     if (node1.left == node0 || node1.right == node0) return node1;
 
-    List<BinaryTree<Integer>> nodesParents = new ArrayList<>();
+    List<BinaryTree<Integer>> nodesParents = new ArrayList<>(); // A set will reduce the complexity
     nodesParents.add(node0);
     nodesParents.add(node1);
 
