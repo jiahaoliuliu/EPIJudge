@@ -7,7 +7,9 @@ import epi.test_framework.TestFailure;
 import epi.test_framework.TimedExecutor;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
@@ -49,7 +51,7 @@ public class Q4LowestCommonAncestorCloseAncestor {
    * and check it periodically, it should be ok.
    *
    * Complexity: O(n), where n is the deepest element between node0 and node1, + 1
-   * 
+   *
    * @param node0
    * @param node1
    * @return
@@ -61,28 +63,27 @@ public class Q4LowestCommonAncestorCloseAncestor {
     if (node0.left == node1 || node0.right == node1) return node0;
     if (node1.left == node0 || node1.right == node0) return node1;
 
-    Map<BinaryTree<Integer>, BinaryTree<Integer>> node0Parents = new HashMap<>();
-    Map<BinaryTree<Integer>, BinaryTree<Integer>> node1Parents = new HashMap<>();
-    node0Parents.put(node0, node0.left);
-    node1Parents.put(node1, node1.left);
+    List<BinaryTree<Integer>> nodesParents = new ArrayList<>();
+    nodesParents.add(node0);
+    nodesParents.add(node1);
 
     // While none of the nodes has reached to the root
     while (node0.parent != null || node1.parent != null) {
       if (node0.parent != null) {
-        if (node1Parents.containsKey(node0.parent)) {
+        if (nodesParents.contains(node0.parent)) {
           return node0.parent;
         }
 
-        node0Parents.put(node0.parent, node0);
+        nodesParents.add(node0.parent);
         node0 = node0.parent;
       }
 
       if (node1.parent != null) {
-        if (node0Parents.containsKey(node1.parent)) {
+        if (nodesParents.contains(node1.parent)) {
           return node1.parent;
         }
 
-        node1Parents.put(node1.parent, node1);
+        nodesParents.add(node1.parent);
         node1 = node1.parent;
       }
     }
