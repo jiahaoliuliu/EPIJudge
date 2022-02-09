@@ -33,6 +33,15 @@ import static org.junit.Assert.assertEquals;
  * </p><p>
  * Hint: What is the maximum number of minimal subarrays that can cover the query?
  * </p>
+ *
+ * Variant: Given an array A, find the shortest subarray A[i,j] such that each distinct value present in A is also present
+ * in the subarray.
+ *
+ * Variant: Given an array A, rearrange the elements so that the shortest subarray containing all the distinct values in
+ * A has maximum possible length
+ *
+ * Variant: Given an array A and a positive integer K, rearrange the elements so that no two equal elements are k or
+ * less apart.
  */
 public class Q6SmallestSubarrayCoveringSet {
 
@@ -227,7 +236,9 @@ public class Q6SmallestSubarrayCoveringSet {
   }
 
   /**
-   * O(n)
+   * Time complexity O(n), where n is the length of the array, since for each two indices we spend O(1) time per
+   * advance, and each is advanced at most n-1 times
+   *
    * @param paragraph
    * @param keywords A set of keywords that will never repeat itself
    * @return
@@ -344,15 +355,75 @@ public class Q6SmallestSubarrayCoveringSet {
     assertEquals(expected, result);
   }
 
+  /**
+   * Book solution 2
+   * Complexity: O(n)
+   *
+   * We can achieve a steaming algorithm by keeping track of latest occurrences of query keywords as we process A.
+   * We use a doubly linked list L to store the last occurrences (index) of each keyword in Q, and has table H to map
+   * each keyword in Q to the corresponding node in L. Each time a word n Q is encountered, we remove its node from L
+   * (which we find by using H), create a new node which records the current index in A, and append the new node to the
+   * end of L. We also update H.
+   *
+   * By doing this, each keyword in L is ordered by its order in A; therefore, if L has nQ words (i.e. all keywords are
+   * shown) and the current index minus the index stored in the first node in L is less than current est, we update
+   * current best.
+   *
+   * @param paragraph
+   * @param keywords
+   * @return
+   */
+  public static Subarray bookSol2FindSmallestSubarrayCoveringSet(Iterator<String> paragraph, List<String> keywords) {
+    LinkedHashMap<String, Integer> dict = new LinkedHashMap<>(keywords.size(), 1, true);
+    for (String s: keywords) {
+      dict.put(s, null);
+    }
+    int numStringsFromQueryStringsSeenSoFar = 0;
+
+    Subarray result = new Subarray(-1, -1);
+    int idx = 0;
+    while (paragraph.hasNext()) {
+      String s = paragraph.next();
+      if (dict.containsKey(s)) { // s is the keywords
+        Integer it = dict.get(s);
+        if (it == null) {
+          // First time seeing this string from keywords
+          numStringsFromQueryStringsSeenSoFar++;
+        }
+        dict.put(s, idx);
+
+        if (numStringsFromQueryStringsSeenSoFar == keywords.size()) {
+          // We have seen all strings in keywords, let's get to work.
+          if ((result.start == -1 && result.end == -1) || idx - getValueForFirstEntry(dict) < result.end - result.start) {
+            result.start = getValueForFirstEntry(dict);
+            result.end = idx;
+          }
+        }
+      }
+      ++idx;
+    }
+    return result;
+  }
+
+  private static Integer getValueForFirstEntry(LinkedHashMap<String, Integer> m) {
+    // LinkedHashMap guarantees iteration over key-value pairs takes place in insertion order,
+    // most recent first
+    Integer result = null;
+    for (Map.Entry<String, Integer> entry: m.entrySet()) {
+      result = entry.getValue();
+      break;
+    }
+    return result;
+  }
+
   @EpiTest(testDataFile = "smallest_subarray_covering_set.tsv")
   public static int findSmallestSubarrayCoveringSetWrapper(
       TimedExecutor executor, List<String> paragraph, Set<String> keywords)
       throws Exception {
     Set<String> copy = new HashSet<>(keywords);
 
-    // TODO: Revert the call to my own method
     Subarray result = executor.run(
-        () -> bookSol1FindSmallestSubarrayCoveringSet(paragraph, keywords));
+        () -> findSmallestSubarrayCoveringSet(paragraph, keywords));
 
     if (result.start < 0 || result.start >= paragraph.size() ||
         result.end < 0 || result.end >= paragraph.size() ||
