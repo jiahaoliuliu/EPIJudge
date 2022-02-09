@@ -6,11 +6,8 @@ import epi.test_framework.TimedExecutor;
 import org.junit.Test;
 
 import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 /**
  * <p>When you type keywords in a search engine, the search engine will return results, and each result
@@ -232,12 +229,16 @@ public class Q6SmallestSubarrayCoveringSet {
   /**
    * O(n)
    * @param paragraph
-   * @param keywords
+   * @param keywords A set of keywords that will never repeat itself
    * @return
    */
   public static Subarray bookSol1FindSmallestSubarrayCoveringSet(List<String> paragraph,
                                                                  Set<String> keywords) {
-    // Create a hash table with all the keywords and its occurrences
+    // Create a hash table with all the keywords and the remaining number to cover
+    // This remaining number has 3 type of values
+    // >=1 (usually 1 because of set) -> There number of occurrences to cover
+    // 0 -> On the current subarray, it already contains this value
+    // <= -1 -> On the current subarray, it contains more than 1 of this item
     Map<String, Long> keywordsToCover = new HashMap<>();
     for (String keyword: keywords) {
       keywordsToCover.putIfAbsent(keyword, 0L);
@@ -246,16 +247,19 @@ public class Q6SmallestSubarrayCoveringSet {
 
     Subarray result = new Subarray(-1, -1);
     int remainingToCover = keywords.size();
-    for (int left = 0, right = 0; right  < paragraph.size(); ++right) {
+    for (int left = 0, right = 0; right  < paragraph.size(); right++) {
       // If the right position of the paragraph is one of the keywords,
       // then decrease the occurrence of that keyword in the keywordsToCover
       // If as result of that decrease the there were 1 or more than 1 keywords, decrease the remaining to cover
       if (keywordsToCover.containsKey(paragraph.get(right))) {
-        Long newOccurrence = keywordsToCover.get(paragraph.get(right)) - 1;
-        Long previousOccurrences = keywordsToCover.put(paragraph.get(right), newOccurrence);
-        if (previousOccurrences >= 1) {
-          --remainingToCover;
+        // If the number of occurrences left to be covered is equal or bigger than one, then there is 1 less value to remain covered
+        // While if it 0 or less than 0, we are covered more than what we need
+        if (keywordsToCover.get(paragraph.get(right)) >= 1) {
+          remainingToCover--;
         }
+        // We mark another keyword covered, then we check how many occurrences are left to be covered
+        Long numberOfOccurrenceLeftToCover = keywordsToCover.get(paragraph.get(right)) - 1;
+        keywordsToCover.put(paragraph.get(right), numberOfOccurrenceLeftToCover);
       }
 
       // Once we found all the keywords, try to advance left and find a smaller subarray
@@ -269,12 +273,16 @@ public class Q6SmallestSubarrayCoveringSet {
 
         // If the left pointer is pointing a keyword, then by advancing the left pointer we are losing a keyword
         if (keywordsToCover.containsKey(paragraph.get(left))) {
-          Long newOccurrence = keywordsToCover.get(paragraph.get(left)) + 1;
-          if (keywordsToCover.put(paragraph.get(left), newOccurrence) >= 0) {
-            ++remainingToCover;
+          // if the number of occurrences is equal or more than 0, that mean we are left an important keyword to be covered
+          // behind, so we need to increase the number of keywords remaining
+          // While if it is less than zero, then we just left a duplicated keyword behind
+          if (keywordsToCover.get(paragraph.get(left)) >= 0) {
+            remainingToCover++;
           }
+          Long numberOfOccurrenceLeftToCover = keywordsToCover.get(paragraph.get(left)) + 1;
+          keywordsToCover.put(paragraph.get(left), numberOfOccurrenceLeftToCover);
         }
-        ++left;
+        left++;
       }
     }
     return result;
@@ -291,6 +299,48 @@ public class Q6SmallestSubarrayCoveringSet {
 
     // Then
     Subarray expected = new Subarray(4, 13);
+    assertEquals(expected, result);
+  }
+
+  @Test
+  public void testBookSol1FindSmallestSubarrayCoveringSet2() {
+    // Given
+    List<String> words = Arrays.asList("apple", "banana", "apple", "apple", "dog", "cat", "apple", "dog", "banana", "apple", "cat", "dog");
+    Set<String> keywords = Set.copyOf(Arrays.asList("banana", "cat"));
+
+    // When
+    Subarray result = bookSol1FindSmallestSubarrayCoveringSet(words, keywords);
+
+    // Then
+    Subarray expected = new Subarray(8, 10);
+    assertEquals(expected, result);
+  }
+
+  @Test
+  public void testBookSol1FindSmallestSubarrayCoveringSet3() {
+    // Given
+    List<String> words = Arrays.asList("a", "b", "c", "b", "a", "d", "c", "a", "e", "a", "a", "b", "e");
+    Set<String> keywords = Set.copyOf(Arrays.asList("a", "c"));
+
+    // When
+    Subarray result = bookSol1FindSmallestSubarrayCoveringSet(words, keywords);
+
+    // Then
+    Subarray expected = new Subarray(6, 7);
+    assertEquals(expected, result);
+  }
+
+  @Test
+  public void testBookSol1FindSmallestSubarrayCoveringSet4() {
+    // Given
+    List<String> words = Arrays.asList("a", "b", "c", "b", "a", "d", "c", "a", "e", "a", "a", "b", "e");
+    Set<String> keywords = Set.copyOf(Arrays.asList("b", "c", "e"));
+
+    // When
+    Subarray result = bookSol1FindSmallestSubarrayCoveringSet(words, keywords);
+
+    // Then
+    Subarray expected = new Subarray(3, 8);
     assertEquals(expected, result);
   }
 
