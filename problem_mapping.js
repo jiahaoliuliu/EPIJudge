@@ -1856,7 +1856,7 @@ problem_mapping = {
                 "total": 950
             },
             "Java: BstFromPreorder.java": {
-                "passed": 0,
+                "passed": 950,
                 "total": 950
             },
             "Python: bst_from_preorder.py": {
