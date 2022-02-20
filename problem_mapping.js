@@ -1898,7 +1898,7 @@ problem_mapping = {
                 "total": 87
             },
             "Java: BstFromSortedArray.java": {
-                "passed": 0,
+                "passed": 87,
                 "total": 87
             },
             "Python: bst_from_sorted_array.py": {
