@@ -2096,7 +2096,7 @@ problem_mapping = {
                 "total": 400
             },
             "Java: SudokuSolve.java": {
-                "passed": 0,
+                "passed": 400,
                 "total": 400
             },
             "Python: sudoku_solve.py": {

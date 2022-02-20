@@ -21,6 +21,10 @@ import static org.junit.Assert.*;
  * Write a function that takes as input a set and returns its power set.
  *
  * Hint: There are 2^n subsets for a given set S of size n. There are 2^k k-bit words.
+ *
+ * Variant: Solve this problem when the input array may have duplicates. i.e. denotes a multi set.
+ * You should not repeat any multiset. For example, if A = <1, 2, 3, 2>, then you should return
+ * <<>, <1>, <2>, <3>, <1, 2>, <1, 3>, <2, 2>, <2,3>, <1, 2, 2>, <1, 2, 3>, <2, 2, 3>, <1, 2, 2, 3>>
  */
 public class Q5PowerSet {
   @EpiTest(testDataFile = "power_set.tsv")
@@ -90,6 +94,8 @@ public class Q5PowerSet {
   /**
    * Book solution 1
    * Brute force
+   * Time complexity: O(n2^n) Because each set takes 2^n time to compute, and there is n sets
+   * Space complexity: O(n2^n)
    * @param inputSet
    * @return
    */
@@ -140,7 +146,13 @@ public class Q5PowerSet {
     assertEquals(8, result.size());
   }
 
-
+  /**
+   * Using an array of bits.
+   * Time complexity: O(n2^n)
+   * Space complexity: O(n)
+   * @param inputSet
+   * @return
+   */
   public static List<List<Integer>> bookSol2GeneratePowerSet(List<Integer> inputSet) {
     List<List<Integer>> powerSet = new ArrayList<>();
     for (int intForSubset = 0; intForSubset < (1 << inputSet.size()); ++intForSubset) {
