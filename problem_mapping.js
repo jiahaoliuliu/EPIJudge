@@ -2026,7 +2026,7 @@ problem_mapping = {
                 "total": 15
             },
             "Java: PowerSet.java": {
-                "passed": 0,
+                "passed": 15,
                 "total": 15
             },
             "Python: power_set.py": {
